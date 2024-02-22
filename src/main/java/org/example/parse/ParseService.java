@@ -6,7 +6,7 @@ import java.net.URL;
 
 public interface ParseService {
 
-    void init();
+    ParseService init();
 
     WebPage parse(URL url);
 
