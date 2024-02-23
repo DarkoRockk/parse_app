@@ -7,11 +7,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ParseFactory {
 
     private static Map<String, ParseService> parseServices = Map.of(
-            "*//bazaraki.com", new HtmlUnitParseService().init()
+            "*//bazaraki.com", HtmlUnitParseService.getInstance()
     );
 
     public static Optional<String> fetchPattern(String address) {
@@ -29,6 +30,8 @@ public class ParseFactory {
 
     public static WebPage parse(String path) throws MalformedURLException {
         var url = new URL(path);
-        return parseServices.get(path).parse(url);
+        AtomicReference<WebPage> out = new AtomicReference<>(new WebPage());
+        fetchPattern(path).ifPresent(row -> out.set(parseServices.get(row).parse(url)));
+        return out.get();
     }
 }

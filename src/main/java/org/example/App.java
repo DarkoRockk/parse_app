@@ -7,7 +7,6 @@ import org.example.parse.bean.WebPage;
 import org.example.web_bazaraki.HtmlUnitParseService;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Hello world!

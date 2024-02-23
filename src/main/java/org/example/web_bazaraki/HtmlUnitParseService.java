@@ -13,10 +13,24 @@ import java.util.List;
 
 @Slf4j
 public class HtmlUnitParseService implements ParseService {
+
+    private static final HtmlUnitParseService instance = new HtmlUnitParseService();
+
+
     private WebClient webClient;
+
+    public HtmlUnitParseService() {
+        System.out.println("CONSTR");
+        this.init();
+    }
+
+    public static ParseService getInstance() {
+        return instance;
+    }
 
     @Override
     public ParseService init() {
+        System.out.println("INIT!");
         webClient = new WebClient();
         webClient.getOptions().setJavaScriptEnabled(false);
         return this;
