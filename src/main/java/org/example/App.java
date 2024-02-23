@@ -1,12 +1,12 @@
 package org.example;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.parse.ParseService;
 import org.example.parse.bean.ParseFactory;
 import org.example.parse.bean.WebPage;
-import org.example.web_bazaraki.HtmlUnitParseService;
 
 import java.net.MalformedURLException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Hello world!
@@ -22,15 +22,25 @@ public class App {
         app.runApp();
     }
 
-    public void runApp() {
-        ParseService parseService = new HtmlUnitParseService();
-        parseService.init();
+    private void runApp() {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    parse("http://bazaraki.com");
+                } catch (MalformedURLException e) {
+                    log.error(e.getMessage(), e);
+                    cancel();
+                }
+            }
+        };
 
-        try {
-            WebPage webPage = ParseFactory.parse("http://bazaraki.com");
-            log.info("Parsed: {}", webPage);
-        } catch (MalformedURLException e) {
-            log.error(e.getMessage(), e);
-        }
+        Timer time = new Timer("ParseTimer");
+        time.scheduleAtFixedRate(task, 0, 5000L);
+    }
+
+    public void parse(String path) throws MalformedURLException {
+        WebPage webPage = ParseFactory.parse(path);
+        log.info("Parsed: {}", webPage);
     }
 }

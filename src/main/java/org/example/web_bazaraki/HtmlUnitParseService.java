@@ -20,7 +20,6 @@ public class HtmlUnitParseService implements ParseService {
     private WebClient webClient;
 
     public HtmlUnitParseService() {
-        System.out.println("CONSTR");
         this.init();
     }
 
@@ -30,7 +29,6 @@ public class HtmlUnitParseService implements ParseService {
 
     @Override
     public ParseService init() {
-        System.out.println("INIT!");
         webClient = new WebClient();
         webClient.getOptions().setJavaScriptEnabled(false);
         return this;
