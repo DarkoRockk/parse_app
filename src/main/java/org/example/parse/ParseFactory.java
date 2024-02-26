@@ -1,7 +1,6 @@
-package org.example.parse.bean;
+package org.example.parse;
 
-import org.example.parse.ParseService;
-import org.example.parse.WebPage;
+import org.example.parse.bean.WebPage;
 import org.example.web_bazaraki.HtmlUnitParseService;
 
 import java.net.MalformedURLException;

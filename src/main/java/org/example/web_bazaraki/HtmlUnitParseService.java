@@ -5,7 +5,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
 import org.example.parse.ParseService;
-import org.example.parse.WebPage;
+import org.example.parse.bean.WebPage;
 
 import java.io.IOException;
 import java.net.URL;

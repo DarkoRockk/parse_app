@@ -1,9 +1,7 @@
 package org.example;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import org.example.parse.bean.ParseFactory;
+import org.example.parse.ParseFactory;
 import org.example.web_bazaraki.HtmlUnitParseService;
 
 import java.util.concurrent.atomic.AtomicReference;
