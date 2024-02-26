@@ -1,4 +1,4 @@
-package org.example.parse.bean;
+package org.example.parse;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
