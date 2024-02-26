@@ -6,6 +6,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
 import org.example.parse.ParseService;
 import org.example.parse.bean.WebPage;
+import org.example.web_bazaraki.bean.DataToParseItem;
+import org.example.web_bazaraki.bean.WebBazarakiPage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,7 +38,7 @@ public class HtmlUnitParseService implements ParseService {
 
     @Override
     public WebPage parse(URL url) {
-        WebPage out = new WebPage();
+        WebBazarakiPage out = new WebBazarakiPage();
 
         try {
             HtmlPage page = webClient.getPage(url);
@@ -44,11 +46,44 @@ public class HtmlUnitParseService implements ParseService {
             titlesList.forEach(htmlElement -> {
                 out.setTitle(htmlElement.getTextContent());
             });
+
+            parseInstagramLink(page, out);
+            parseDataToParse(page, out);
+
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
 
         return out;
+    }
+
+    private void parseInstagramLink(HtmlPage page, WebBazarakiPage out) {
+        List<HtmlElement> linksList = page.getByXPath("//a[contains(@href, 'instagram.com')]");
+        linksList.forEach(htmlElement -> {
+            out.getInstagramLink().add(htmlElement.getAttribute("href"));
+        });
+    }
+
+    private void parseDataToParse(HtmlPage page, WebBazarakiPage out) {
+        List<HtmlElement> dataToParseBlocks = page.getByXPath("""
+                //img[@alt="Motors"]
+                /../../..
+                """);
+        dataToParseBlocks.forEach(htmlElement -> {
+            DataToParseItem item = new DataToParseItem();
+            htmlElement.getByXPath("""
+                    ./div/p
+                    """).stream().findFirst().ifPresent(el -> {
+                item.setTitle(((HtmlElement) el).getTextContent());
+            });
+            htmlElement.getByXPath("""
+                    ./div/div[@class="sub-category-container"]
+                    /div/ul
+                    """).stream().findFirst().ifPresent(el -> {
+                item.setDetails(((HtmlElement) el).getTextContent());
+            });
+            out.addDataToParseItem(item);
+        });
     }
 }
 
