@@ -37,22 +37,16 @@ public class HtmlUnitParseService implements ParseService {
     }
 
     @Override
-    public WebPage parse(URL url) {
+    public WebPage parse(URL url) throws IOException {
         WebBazarakiPage out = new WebBazarakiPage();
+        HtmlPage page = webClient.getPage(url);
+        List<HtmlElement> titlesList = page.getByXPath("//title");
+        titlesList.forEach(htmlElement -> {
+            out.setTitle(htmlElement.getTextContent());
+        });
 
-        try {
-            HtmlPage page = webClient.getPage(url);
-            List<HtmlElement> titlesList = page.getByXPath("//title");
-            titlesList.forEach(htmlElement -> {
-                out.setTitle(htmlElement.getTextContent());
-            });
-
-            parseInstagramLink(page, out);
-            parseDataToParse(page, out);
-
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
+        parseInstagramLink(page, out);
+        parseDataToParse(page, out);
 
         return out;
     }
